@@ -1,103 +1,75 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import { UserContext } from '../UserContext/UserContext';
-import { Link } from "react-router-dom";
 
-const Create = () => {
-    const [id, setId] = useState("");
-    const [book_name, setBook_name] = useState("");
-    const [borrow_date, setBorrow_date] = useState("");
-    const [return_date, setReturn_date] = useState("");
-    const [student_name, setStudent_name] = useState("");
-    const [member_type, setMember_type] = useState();
-    const [description, setDescription] = useState("");
-    const [academic_class, setAcademic_class] = useState("");
-
+const Edit = () => {
     const [users, setUsers] = useContext(UserContext);
+    const { id } = useParams();
+    const user = users.find((user) => user.id == id);
 
-    useEffect(() => {
-        console.log('show user data', users);
-    }, [users])
-    const update_id = (e) => {
-        setId(e.target.value);
-        console.log(id);
-
-    };
-    const update_book_name = (e) => {
-        setBook_name(e.target.value);
-        console.log(book_name);
-    };
-    const update_borrow_date = (e) => {
-        setBorrow_date(e.target.value);
-        console.log(borrow_date);
-    };
-    const update_return_date = (e) => {
-        setReturn_date(e.target.value);
-        console.log(return_date);
-
-    };
-    const update_student_name = (e) => {
-        setStudent_name(e.target.value);
-        console.log(student_name);
-
-    };
-    const update_member_type = (e) => {
-        setMember_type(e.target.value);
+    const [book_name, setBook_name] = useState(user.book_name);
+    const [borrow_date, setBorrow_date] = useState(user.borrow_date);
+    const [return_date, setReturn_date] = useState(user.return_date);
+    const [student_name, setStudent_name] = useState(user.student_name);
+    const [member_type, setMember_type] = useState(user.member_type);
+    const [description, setDescription] = useState(user.description);
+    const [academic_class, setAcademic_class] = useState(user.academic_class);
 
 
 
-    };
-    const update_description = (e) => {
-        setDescription(e.target.value);
-        console.log(description);
 
-    };
-    const update_academic_class = (e) => {
-        setAcademic_class(e.target.value);
-        console.log(academic_class);
 
-    };
-    const addUser = (e) => {
+    const editbook = (e) => {
         e.preventDefault();
-        setUsers([...users, { id: id, book_name: book_name, borrow_date: borrow_date, return_date: return_date, student_name: student_name, member_type: member_type, description: description, academic_class: academic_class }])
-
-    }
-    console.log(member_type);
+        user.book_name = book_name;
+        user.borrow_date = borrow_date;
+        user.return_date = return_date;
+        user.student_name = student_name;
+        user.member_type = member_type;
+        user.description = description;
+        user.academic_class = academic_class;
+        const restUsers = users.filter(user => user.id != id)
+        restUsers.push(user)
+        setUsers([...restUsers])
+    };
+    console.log('show me', users);
     return (
+
         <div>
-            <h1>I am created</h1>
+            <h1>I am Edit</h1>
             <div className=" container w-full max-w-xs flex justify-center">
-                <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={addUser}>
+                <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={editbook} >
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" for="id">
-                            Book Name
+                            ID NO:  {user.id}
                         </label>
-                        <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="book_name" type="text" name="id" value={id} onChange={update_id} placeholder="id" />
+
                     </div>
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" for="book_name">
                             Book Name
                         </label>
-                        <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="book_name" type="text" name="book_name" value={book_name} onChange={update_book_name} placeholder="book_name" />
+                        <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="book_name" type="text" name="book_name" value={book_name} onChange={(e) => setBook_name(e.target.value)} />
                     </div>
                     <div className="mb-6">
                         <label className="block text-gray-700 text-sm font-bold mb-2" for="borrow_date">
                             Borrow Date
                         </label>
-                        <input className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="borrow_date" type="date" name="borrow_date" value={borrow_date} onChange={update_borrow_date} />
+                        <input className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="borrow_date" type="date" name="borrow_date" value={borrow_date} onChange={(e) => setBorrow_date(e.target.value)} />
 
                     </div>
                     <div className="mb-6">
                         <label className="block text-gray-700 text-sm font-bold mb-2" for="borrow_date">
                             Return Date
                         </label>
-                        <input className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="borrow_date" type="date" name="return_date" value={return_date} onChange={update_return_date} />
+                        <input className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="borrow_date" type="date" name="return_date" value={return_date} onChange={(e) => setReturn_date(e.target.value)} />
 
                     </div>
                     <div className="mb-6">
                         <label className="block text-gray-700 text-sm font-bold mb-2" for="borrow_date">
                             Student Name
                         </label>
-                        <input className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="borrow_date" name="student_name" type="text" value={student_name} onChange={update_student_name} />
+                        <input className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="borrow_date" name="student_name" type="text" value={student_name} onChange={(e) => setStudent_name(e.target.value)} />
 
                     </div>
                     {/* <div className="mb-6">
@@ -121,22 +93,20 @@ const Create = () => {
                     <div class="form-group">
                         <label for="student_name">Member Type</label>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="member_type" id="member_type" value="Monthly" onChange={update_member_type}
-                                checked={member_type === "Monthly"} required />
+                            <input class="form-check-input" type="radio" name="member_type" id="member_type" value="Monthly" onChange={(e) => setMember_type(e.target.value)} checked={member_type === "Monthly"} required />
                             <label class="form-check-label" for="member_type">
                                 Monthly
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="member_type" id="member_type" value="Yearly" onChange={update_member_type}
-                                checked={member_type === "Yearly"} required />
+                            <input class="form-check-input" type="radio" name="member_type" id="member_type" value="Yearly" onChange={(e) => setMember_type(e.target.value)} checked={member_type === "Yearly"} required />
                             <label class="form-check-label" for="member_type">
                                 Yearly
                             </label>
                         </div>
                     </div>
                     <div className="mb-6">
-                        <label className="block text-gray-700 text-sm font-bold mb-2" for="description">
+                        <label className="block text-gray-700 text-sm font-bold mb-2" for="description" >
                             Description
                         </label>
                         <textarea
@@ -157,9 +127,9 @@ const Create = () => {
         m-0
         focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none
       "
-                            id="description" name="description" value={description} onChange={update_description}
+                            id="description" name="description" value={description} onChange={(e) => setDescription(e.target.value)}
                             rows="3"
-                            placeholder="Your message"
+
                         ></textarea>
                     </div>
                     <div className="mb-6">
@@ -167,21 +137,7 @@ const Create = () => {
                             Academic Class
                         </label>
                         <div class="mb-3 xl:w-96">
-                            <select class="form-select appearance-none
-      block
-      w-full
-      px-3
-      py-1.5
-      text-base
-      font-normal
-      text-gray-700
-      bg-white bg-clip-padding bg-no-repeat
-      border border-solid border-gray-300
-      rounded
-      transition
-      ease-in-out
-      m-0
-      focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none" aria-label="Default select example" value={academic_class} name="academic_class" onChange={update_academic_class}>
+                            <select name="academic_class" value={academic_class} onChange={(e) => setAcademic_class(e.target.value)}>
                                 <option selected>Open this select menu</option>
                                 <option value="1">One</option>
                                 <option value="2">Two</option>
@@ -192,7 +148,7 @@ const Create = () => {
                     </div>
                     <div className="flex items-center justify-between">
                         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
-                            Add Book
+                            Edit Book
                         </button>
                         <Link to="/">
                             <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
@@ -203,9 +159,11 @@ const Create = () => {
                     </div>
                 </form>
 
-            </div>
-        </div>
+            </div >
+
+
+        </div >
     );
 };
 
-export default Create;
+export default Edit;
